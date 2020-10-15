@@ -21,16 +21,12 @@ public final class KnowledgeBase {
         return current.getData().getQuestion();
     }
 
-    public boolean isAnimal() {
-        return current.isLeaf();
-    }
-
     public boolean isStatement() {
         return !current.isLeaf();
     }
 
-    public void next(boolean direction) {
-        current = direction ? current.getYes() : current.getNo();
+    public void next(boolean isYes) {
+        current = isYes ? current.getYes() : current.getNo();
     }
 
     public Question getData() {
