@@ -1,19 +1,30 @@
 package animals.domain;
 
-public final class Statement implements Question {
-    private final String data;
+import java.util.Map;
 
-    public static Statement from(String input) {
-        return new Statement(input.replaceFirst("(.+)\\.?", "$1"));
-    }
+public final class Statement implements Question {
+    private static final Map<String, String> RULES_QUESTION = Map.of(
+            "it can (.*)", "Can it $1?",
+            "it has (.*)", "Does it have $1?",
+            "it is (.*)", "Is it $1?"
+    );
+    private static final Map<String, String> RULES_NEGATIVE = Map.of(
+            "it can (.*)", "It can't $1.",
+            "it has (.*)", "It doesn't have $1.",
+            "it is (.*)", "It isn't $1."
+    );
+    private final String data;
 
     private Statement(String input) {
         this.data = input;
     }
 
+    public static Statement from(String input) {
+        return new Statement(input.toLowerCase().trim().replaceFirst("(.+)\\.?", "$1"));
+    }
+
     public String getFact(final Animal animal, final boolean isPositive) {
-        final var fact = getFact(isPositive).replaceFirst("It(.+)", "The " + animal.getName() + "$1");
-        return capitalize(fact);
+        return getFact(isPositive).replaceFirst("It(.+)", "The " + animal.getName() + "$1");
     }
 
     public String getFact(final boolean isPositive) {
@@ -25,29 +36,23 @@ public final class Statement implements Question {
     }
 
     public String getNegativeFact() {
-        final String fact;
-        if (data.startsWith("it has")) {
-            fact = data.replaceFirst("it has", "It doesn't have");
-        } else if (data.startsWith("it can")) {
-            fact = data.replaceFirst("it can", "It can't");
-        } else {
-            fact = data.replaceFirst("it is", "It isn't");
-        }
-        return fact + ".";
+        return generateSentence(RULES_NEGATIVE);
     }
 
     @Override
     public String getQuestion() {
-        final var question = data.replaceFirst("It (can|has|is) (.+)", "$1 it $2?");
-        return capitalize(question);
+        return generateSentence(RULES_QUESTION);
+    }
+
+    private String generateSentence(Map<String, String> rules) {
+        final var rule = rules.entrySet().stream()
+                .filter(e -> data.matches(e.getKey()))
+                .findFirst().orElseThrow();
+        return capitalize(data.replaceFirst(rule.getKey(), rule.getValue()));
     }
 
     private String capitalize(final String sentence) {
         return sentence.substring(0, 1).toUpperCase() + sentence.substring(1).toLowerCase();
     }
 
-    @Override
-    public String toString() {
-        return data;
-    }
 }
