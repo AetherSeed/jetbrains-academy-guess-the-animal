@@ -1,5 +1,7 @@
 package animals;
 
+import animals.domain.Statement;
+
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Random;
@@ -76,6 +78,22 @@ final class UI {
         }
     }
 
+    Statement getStatement() {
+        while (true) {
+            System.out.println("The sentence should be of the format: \n" +
+                    "- It can ...\n" +
+                    "- It has ...\n" +
+                    "- It is  ... ");
+            final var statement = scanner.nextLine().toLowerCase();
+            if (statement.matches("it (can|has|is) .+")) {
+                return new Statement(statement);
+            }
+            System.out.println("The examples of a statement: \n" +
+                    "It can fly \n" +
+                    "It has horns \n" +
+                    "It is a mammal ");
+        }
+    }
     String readLine() {
         return scanner.nextLine().trim().toLowerCase();
     }

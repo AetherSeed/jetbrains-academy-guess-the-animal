@@ -1,6 +1,6 @@
-package animals;
+package animals.domain;
 
-final class Animal {
+public final class Animal implements Question {
     private static final String VOWEL_ARTICLE = "an ";
     private static final String CONSONANT_ARTICLE = "a ";
     private static final String ENGLISH_VOWELS = "aeiou";
@@ -11,7 +11,7 @@ final class Animal {
         this.data = data;
     }
 
-    static Animal from(String input) {
+    public static Animal from(String input) {
         String name = input.toLowerCase().strip();
         if (name.startsWith(VOWEL_ARTICLE) || name.startsWith(CONSONANT_ARTICLE)) {
             return new Animal(name);
@@ -23,7 +23,12 @@ final class Animal {
 
     }
 
-    String getQuestion() {
+    public String getName() {
+        return data.substring(data.startsWith(CONSONANT_ARTICLE) ? 3 : 2);
+    }
+
+    @Override
+    public String getQuestion() {
         return "Is it " + data + "?";
     }
 
