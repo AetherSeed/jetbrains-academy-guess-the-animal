@@ -1,5 +1,6 @@
 package animals;
 
+import animals.domain.Animal;
 import animals.domain.Statement;
 
 import java.time.LocalTime;
@@ -97,5 +98,38 @@ final class UI {
 
     private String pickMessage(final String[] messages) {
         return messages[random.nextInt(messages.length)];
+    }
+
+
+    public void sayLearnedMuch() {
+        System.out.print(pickMessage(new String[]{
+                "Nice!",
+                "Great!",
+                "Wonderful!"
+        }));
+        System.out.println(" I've learned so much about animals!");
+    }
+
+    public Animal askFavoriteAnimal() {
+        System.out.println("I want to learn about animals.");
+        System.out.println("Which animal do you like most?");
+        return Animal.from(readLine());
+    }
+
+    public void sayThinkAnimal() {
+        System.out.println("You think of an animal, and I guess it.");
+        System.out.println("Press enter when you're ready.");
+        scanner.nextLine();
+    }
+
+    public void askNewGame() {
+        System.out.println(pickMessage(new String[]{
+                "That was funny! Want to try again?",
+                "Do you like to play again?",
+                "It was nice to play with you! Do you want to repeat?",
+                "It was a pleasure for me to know you better! Want to play again?",
+                "Thank you for playing! One more game?",
+                "Thank you! I had too much fun! Do you want to play again?"
+        }));
     }
 }

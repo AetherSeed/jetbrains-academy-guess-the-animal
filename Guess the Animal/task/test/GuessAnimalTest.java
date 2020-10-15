@@ -11,23 +11,22 @@ public class GuessAnimalTest extends StageTest<String> {
     }
 
     @DynamicTestingMethod
-    CheckResult incorrectStatement() throws IOException {
-        return new Scenario("incorrect-statement").check();
+    CheckResult theFirstQuestion() throws IOException {
+        return new Scenario("the-first-question").check();
     }
 
     @DynamicTestingMethod
-    CheckResult correctStatement() throws IOException {
-        return new Scenario("correct-statement").check();
+    CheckResult positiveAnswer() throws IOException {
+        return new Scenario("positive-answers").check();
     }
 
     @DynamicTestingMethod
-    CheckResult completeScenario() throws IOException {
-        return new Scenario("complete-scenario").check();
+    CheckResult negativeAnswer() throws IOException {
+        return new Scenario("negative-answers").check();
     }
 
     @DynamicTestingMethod
-    CheckResult factsQuestion() throws IOException {
-        return new Scenario("facts-and-question").check();
+    CheckResult incorrectAnswer() throws IOException {
+        return new Scenario("unclear-answers").check();
     }
 }
-
