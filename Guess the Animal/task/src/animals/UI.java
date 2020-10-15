@@ -6,7 +6,7 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
-public class UI {
+final class UI {
     private static final Pattern POSITIVE = Pattern.compile(
             "(y|yes|yeah|yep|sure|right|affirmative|correct|indeed|you bet|exactly|you said it)[.!]?");
     private static final Pattern NEGATIVE = Pattern.compile(
@@ -50,7 +50,7 @@ public class UI {
         }));
     }
 
-    public boolean askYesNo() {
+    boolean askYesNo() {
         while (true) {
             final var respond = readLine();
             if (POSITIVE.matcher(respond).matches()) {
@@ -76,7 +76,7 @@ public class UI {
         }
     }
 
-    public String readLine() {
+    String readLine() {
         return scanner.nextLine().trim().toLowerCase();
     }
 
