@@ -1,33 +1,21 @@
+import java.util.Map;
 import java.util.Scanner;
+import java.util.TreeMap;
 
 public class Main {
     public static void main(String[] args) {
         final var scanner = new Scanner(System.in);
-        int numberQueries = scanner.nextInt();
+        final var tree = new TreeMap<Integer, String>();
+
+        final Map<String, Runnable> operations = Map.of(
+                "+", () -> tree.put(scanner.nextInt(), scanner.next()),
+                "-", () -> tree.remove(scanner.nextInt()),
+                "!", () -> tree.put(scanner.nextInt(), scanner.next()));
+
+        var numberQueries = scanner.nextInt();
         while (numberQueries-- > 0) {
-            final var operation = scanner.next().charAt(0);
-            switch (operation) {
-                case '+':
-                    break;
-                case '-':
-                    break;
-                case '!':
-                    break;
-                default:
-                    System.out.println("Unrecognized operation");
-            }
+            operations.get(scanner.next()).run();
         }
-    }
-}
-
-class Node {
-    int key;
-    int value;
-    Node left;
-    Node right;
-
-    Node(int key, int value) {
-        this.key = key;
-        this.value = value;
+        System.out.println(String.join(" ", tree.values()));
     }
 }
