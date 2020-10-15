@@ -80,13 +80,10 @@ final class UI {
 
     Statement getStatement() {
         while (true) {
-            System.out.println("The sentence should be of the format: \n" +
-                    "- It can ...\n" +
-                    "- It has ...\n" +
-                    "- It is  ... ");
-            final var statement = scanner.nextLine().toLowerCase();
-            if (statement.matches("it (can|has|is) .+")) {
-                return new Statement(statement);
+            System.out.println("The sentence should be of the format: 'It can/has/is ...'");
+            final var input = readLine();
+            if (input.matches("it (can|has|is) .+")) {
+                return Statement.from(input);
             }
             System.out.println("The examples of a statement: \n" +
                     "It can fly \n" +

@@ -24,12 +24,18 @@ public final class Animal implements Question {
     }
 
     public String getName() {
-        return data.substring(data.startsWith(CONSONANT_ARTICLE) ? 3 : 2);
+        return data.substring(data.startsWith(CONSONANT_ARTICLE) ? 2 : 3);
     }
 
     @Override
     public String getQuestion() {
         return "Is it " + data + "?";
     }
+
+    @Override
+    public String toString() {
+        return data;
+    }
+
 
 }

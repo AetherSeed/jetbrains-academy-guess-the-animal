@@ -1,10 +1,14 @@
 package animals.domain;
 
-public class Statement implements Question {
-    private final String statement;
+public final class Statement implements Question {
+    private final String data;
 
-    public Statement(String statement) {
-        this.statement = capitalize(statement.replaceFirst("(.+)\\.?", "$1"));
+    public static Statement from(String input) {
+        return new Statement(input.replaceFirst("(.+)\\.?", "$1"));
+    }
+
+    private Statement(String input) {
+        this.data = input;
     }
 
     public String getFact(final Animal animal, final boolean isPositive) {
@@ -17,23 +21,24 @@ public class Statement implements Question {
     }
 
     public String getPositiveFact() {
-        return statement + ".";
+        return capitalize(data + ".");
     }
 
     public String getNegativeFact() {
         final String fact;
-        if (statement.startsWith("It has")) {
-            fact = statement.replaceFirst("It has", "It doesn't have");
-        } else if (statement.startsWith("It can")) {
-            fact = statement.replaceFirst("It can", "It can't");
+        if (data.startsWith("it has")) {
+            fact = data.replaceFirst("it has", "It doesn't have");
+        } else if (data.startsWith("it can")) {
+            fact = data.replaceFirst("it can", "It can't");
         } else {
-            fact = statement.replaceFirst("It is", "It isn't");
+            fact = data.replaceFirst("it is", "It isn't");
         }
         return fact + ".";
     }
 
+    @Override
     public String getQuestion() {
-        final var question = statement.replaceFirst("It (can|has|is) (.+)", "$1 it $2?");
+        final var question = data.replaceFirst("It (can|has|is) (.+)", "$1 it $2?");
         return capitalize(question);
     }
 
@@ -43,6 +48,6 @@ public class Statement implements Question {
 
     @Override
     public String toString() {
-        return statement;
+        return data;
     }
 }

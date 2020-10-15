@@ -14,11 +14,17 @@ public class Main {
         final var secondAnimal = Animal.from(ui.readLine());
 
         System.out.println("Specify a fact that distinguishes " + firstAnimal + " from " + secondAnimal + ".");
-        System.out.println("The sentence should be of the format: 'It can/has/is ...'");
 
-        final var answer = ui.askYesNo();
-        System.out.print("You answered: ");
-        System.out.println(answer ? "Yes" : "No");
+        final var statement = ui.getStatement();
+        System.out.println("Is it correct for " + secondAnimal + "?");
+        final var isCorrectSecond = ui.askYesNo();
+        final var isCorrectFirst = !isCorrectSecond;
+
+        System.out.println("I learned the following facts about animals:");
+        System.out.println(" - " + statement.getFact(firstAnimal, isCorrectFirst));
+        System.out.println(" - " + statement.getFact(secondAnimal, isCorrectSecond));
+        System.out.println("I can distinguish these animals by asking the question:");
+        System.out.println(" - " + statement.getQuestion());
 
         ui.sayGoodbye();
     }
