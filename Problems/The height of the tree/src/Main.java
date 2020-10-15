@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class Main {
+public final class Main {
     public static void main(String[] args) {
         final var scanner = new Scanner(System.in);
         int nodesCount = scanner.nextInt();
@@ -9,16 +9,27 @@ public class Main {
 
         while (nodesCount-- > 0) {
             Node.depth = -1;
-            root = insert(root, scanner.nextInt());
+            root = Node.insert(root, scanner.nextInt());
             if (Node.depth > maxDepth) {
                 maxDepth = Node.depth;
             }
         }
         System.out.println(maxDepth);
     }
+}
+
+final class Node {
+    static int depth;
+    private final int key;
+    private Node left;
+    private Node right;
+
+    Node(int key) {
+        this.key = key;
+    }
 
     static Node insert(Node node, int key) {
-        Node.depth++;
+        depth++;
         if (node == null) {
             return new Node(key);
         }
@@ -28,17 +39,5 @@ public class Main {
             node.right = insert(node.right, key);
         }
         return node;
-    }
-
-}
-
-class Node {
-    static int depth;
-    int key;
-    Node left;
-    Node right;
-
-    Node(int key) {
-        this.key = key;
     }
 }
