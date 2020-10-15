@@ -7,7 +7,7 @@ public class Node {
     private Node yes;
     private Node no;
 
-    Node(final Question data) {
+    public Node(final Question data) {
         this.data = data;
     }
 
