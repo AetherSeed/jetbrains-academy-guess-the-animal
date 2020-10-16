@@ -1,44 +1,24 @@
 package animals.repository;
 
 import animals.domain.Animal;
-import animals.domain.Question;
 import animals.domain.Statement;
 
-public final class KnowledgeBase {
-    private final Node root;
-    private Node current;
+public interface KnowledgeBase {
+    void reset();
 
-    public KnowledgeBase(Node root) {
-        this.root = root;
-        this.current = root;
-    }
+    String getData();
 
-    public void reset() {
-        current = root;
-    }
+    String getQuestion();
 
-    public String getQuestion() {
-        return current.getData().getQuestion();
-    }
+    boolean isEmpty();
 
-    public boolean isStatement() {
-        return !current.isLeaf();
-    }
+    boolean isAnimal();
 
-    public void next(boolean isYes) {
-        current = isYes ? current.getYes() : current.getNo();
-    }
+    boolean isStatement();
 
-    public Question getData() {
-        return current.getData();
-    }
+    void setRoot(TreeNode root);
 
-    public void addAnimal(final Animal animal, final Statement statement, final boolean isRight) {
-        Node newAnimal = new Node(animal);
-        Node oldAnimal = new Node(current.getData());
-        current.setData(statement);
-        current.setYes(isRight ? newAnimal : oldAnimal);
-        current.setNo(isRight ? oldAnimal : newAnimal);
-    }
+    void next(boolean direction);
 
+    void addAnimal(final Animal animal, final Statement statement, final boolean isRight);
 }

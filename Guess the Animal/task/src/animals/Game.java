@@ -1,20 +1,19 @@
 package animals;
 
 import animals.domain.Animal;
-import animals.repository.KnowledgeBase;
-import animals.repository.Node;
+import animals.repository.KnowledgeTree;
 
 public class Game {
-    private final UI ui = new UI();
+    private final KnowledgeTree db;
+    private final UI ui;
+
+    public Game(KnowledgeTree db, UI ui) {
+        this.db = db;
+        this.ui = ui;
+
+    }
 
     public void run() {
-        ui.sayHello();
-        final var root = new Node(ui.askFavoriteAnimal());
-        final var db = new KnowledgeBase(root);
-        ui.sayLearnedMuch();
-
-        System.out.println("Let's play a game!");
-
         do {
             ui.sayThinkAnimal();
 
@@ -30,7 +29,7 @@ public class Game {
                 System.out.println("I give up. What animal do you have in mind?");
 
                 final var animal = Animal.from(ui.readLine());
-                final var guessedAnimal = (Animal) db.getData();
+                final var guessedAnimal = Animal.from(db.getData());
 
                 System.out.printf("Specify a fact that distinguishes %s from %s:%n", animal, db.getData());
                 final var statement = ui.getStatement();
