@@ -38,7 +38,7 @@ public final class KnowledgeBase {
         Node oldAnimal = new Node(current.getData());
         current.setData(statement);
         current.setYes(isRight ? newAnimal : oldAnimal);
-        current.setYes(isRight ? oldAnimal : newAnimal);
+        current.setNo(isRight ? oldAnimal : newAnimal);
     }
 
 }
