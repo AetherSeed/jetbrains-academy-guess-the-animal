@@ -30,6 +30,8 @@ public interface KnowledgeBase {
 
     boolean save();
 
+    String FILENAME = "animals";
+
     enum Type {
         XML(new XmlMapper()),
         JSON(new JsonMapper()),
@@ -54,8 +56,7 @@ public interface KnowledgeBase {
 
         Type(ObjectMapper objectMapper) {
             this.repository = new KnowledgeTreeJackson(
-                    objectMapper,
-                    "animals." + this.name().toLowerCase()
+                    objectMapper, FILENAME + "." + this.name().toLowerCase()
             );
         }
 
