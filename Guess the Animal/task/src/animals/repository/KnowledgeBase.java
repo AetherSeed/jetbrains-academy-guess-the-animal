@@ -1,44 +1,68 @@
 package animals.repository;
 
 import animals.domain.Animal;
-import animals.domain.Question;
 import animals.domain.Statement;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 
-public final class KnowledgeBase {
-    private final Node root;
-    private Node current;
+public interface KnowledgeBase {
+    void reset();
 
-    public KnowledgeBase(Node root) {
-        this.root = root;
-        this.current = root;
-    }
+    String getData();
 
-    public void reset() {
-        current = root;
-    }
+    String getQuestion();
 
-    public String getQuestion() {
-        return current.getData().getQuestion();
-    }
+    boolean isEmpty();
 
-    public boolean isStatement() {
-        return !current.isLeaf();
-    }
+    boolean isAnimal();
 
-    public void next(boolean isYes) {
-        current = isYes ? current.getYes() : current.getNo();
-    }
+    boolean isStatement();
 
-    public Question getData() {
-        return current.getData();
-    }
+    void setRoot(TreeNode root);
 
-    public void addAnimal(final Animal animal, final Statement statement, final boolean isRight) {
-        Node newAnimal = new Node(animal);
-        Node oldAnimal = new Node(current.getData());
-        current.setData(statement);
-        current.setYes(isRight ? newAnimal : oldAnimal);
-        current.setYes(isRight ? oldAnimal : newAnimal);
+    void next(boolean direction);
+
+    void addAnimal(final Animal animal, final Statement statement, final boolean isRight);
+
+    boolean load();
+
+    boolean save();
+
+    String FILENAME = "animals";
+
+    enum Type {
+        XML(new XmlMapper()),
+        JSON(new JsonMapper()),
+        YAML(new YAMLMapper()),
+        IN_MEMORY(new KnowledgeTree() {
+            @Override
+            public boolean load() {
+                return false;
+            }
+
+            @Override
+            public boolean save() {
+                return false;
+            }
+        });
+
+        private final KnowledgeBase repository;
+
+        Type(KnowledgeBase repository) {
+            this.repository = repository;
+        }
+
+        Type(ObjectMapper objectMapper) {
+            this.repository = new KnowledgeTreeJackson(
+                    objectMapper, FILENAME + "." + this.name().toLowerCase()
+            );
+        }
+
+        public KnowledgeBase getInstance() {
+            return repository;
+        }
     }
 
 }
