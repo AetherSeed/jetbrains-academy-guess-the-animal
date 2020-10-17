@@ -1,6 +1,7 @@
 package animals.domain;
 
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 public final class Statement implements Question {
     private static final Map<String, String> RULES_QUESTION = Map.of(
@@ -19,8 +20,8 @@ public final class Statement implements Question {
         this.data = input;
     }
 
-    public static Statement from(String input) {
-        return new Statement(input.toLowerCase().trim().replaceFirst("(.+)\\.?", "$1"));
+    public static Statement from(Object input) {
+        return new Statement(input.toString().toLowerCase().trim().replaceFirst("(.+)\\.?", "$1"));
     }
 
     public String getFact(final Animal animal, final boolean isPositive) {
@@ -47,7 +48,8 @@ public final class Statement implements Question {
     private String generateSentence(Map<String, String> rules) {
         final var rule = rules.entrySet().stream()
                 .filter(e -> data.matches(e.getKey()))
-                .findFirst().orElseThrow();
+                .findFirst()
+                .orElseThrow(() -> new NoSuchElementException("Can't generate question from statement: " + data));
         return capitalize(data.replaceFirst(rule.getKey(), rule.getValue()));
     }
 
@@ -55,4 +57,8 @@ public final class Statement implements Question {
         return sentence.substring(0, 1).toUpperCase() + sentence.substring(1).toLowerCase();
     }
 
+    @Override
+    public String toString() {
+        return data;
+    }
 }

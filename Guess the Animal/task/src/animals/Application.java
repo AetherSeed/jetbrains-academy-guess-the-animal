@@ -1,6 +1,6 @@
 package animals;
 
-import animals.repository.KnowledgeTreeJackson;
+import animals.repository.KnowledgeBase;
 import animals.repository.TreeNode;
 
 import java.util.logging.Logger;
@@ -8,9 +8,9 @@ import java.util.logging.Logger;
 public class Application implements Runnable {
     private static final Logger LOGGER = Logger.getLogger(Application.class.getName());
 
-    private final KnowledgeTreeJackson knowledgeBase;
+    private final KnowledgeBase knowledgeBase;
 
-    Application(final KnowledgeTreeJackson base) {
+    Application(final KnowledgeBase base) {
         knowledgeBase = base;
     }
 

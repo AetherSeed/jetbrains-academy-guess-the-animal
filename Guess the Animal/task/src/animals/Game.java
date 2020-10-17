@@ -1,13 +1,13 @@
 package animals;
 
 import animals.domain.Animal;
-import animals.repository.KnowledgeTree;
+import animals.repository.KnowledgeBase;
 
 public class Game {
-    private final KnowledgeTree db;
+    private final KnowledgeBase db;
     private final UI ui;
 
-    public Game(KnowledgeTree db, UI ui) {
+    public Game(KnowledgeBase db, UI ui) {
         this.db = db;
         this.ui = ui;
 

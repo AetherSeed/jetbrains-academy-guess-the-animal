@@ -7,7 +7,7 @@ import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class KnowledgeTree implements KnowledgeBase {
+public abstract class KnowledgeTree implements KnowledgeBase {
     private static final Logger LOGGER = Logger.getLogger(KnowledgeTree.class.getName());
 
     protected TreeNode root;
@@ -66,4 +66,5 @@ public class KnowledgeTree implements KnowledgeBase {
         current.setNo(isRight ? oldAnimal : newAnimal);
         LOGGER.log(Level.FINER, "...added {0}, '{1}' - {2}", new Object[]{animal, statement, isRight});
     }
+
 }
