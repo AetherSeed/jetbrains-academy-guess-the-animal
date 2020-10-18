@@ -1,6 +1,7 @@
 package animals;
 
 import animals.repository.KnowledgeBase;
+import animals.ui.Application;
 
 import java.util.Arrays;
 import java.util.logging.Level;

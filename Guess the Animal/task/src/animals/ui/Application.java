@@ -1,4 +1,4 @@
-package animals;
+package animals.ui;
 
 import animals.repository.KnowledgeBase;
 import animals.repository.TreeNode;

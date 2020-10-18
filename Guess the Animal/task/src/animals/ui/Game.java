@@ -1,7 +1,8 @@
-package animals;
+package animals.ui;
 
 import animals.domain.Animal;
 import animals.repository.KnowledgeBase;
+import animals.ui.UI;
 
 public class Game {
     private final KnowledgeBase db;

@@ -1,4 +1,4 @@
-package animals;
+package animals.ui;
 
 import animals.domain.Animal;
 import animals.domain.Statement;
@@ -9,7 +9,7 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
-final class UI {
+public final class UI {
     private static final Pattern POSITIVE = Pattern.compile(
             "(y|yes|yeah|yep|sure|right|affirmative|correct|indeed|you bet|exactly|you said it)[.!]?");
     private static final Pattern NEGATIVE = Pattern.compile(
@@ -17,7 +17,7 @@ final class UI {
     private static final Scanner scanner = new Scanner(System.in);
     private static final Random random = new Random();
 
-    void sayHello() {
+    public void sayHello() {
         final var messages = new ArrayList<String>();
         final var time = LocalTime.now();
         if (time.isAfter(LocalTime.NOON) && time.isBefore(LocalTime.of(18, 0))) {
@@ -36,7 +36,7 @@ final class UI {
         System.out.println();
     }
 
-    void sayGoodbye() {
+    public void sayGoodbye() {
         System.out.println();
         System.out.println(pickMessage(new String[]{
                 "Bye!",
@@ -53,7 +53,7 @@ final class UI {
         }));
     }
 
-    boolean askYesNo() {
+    public boolean askYesNo() {
         while (true) {
             final var respond = readLine();
             if (POSITIVE.matcher(respond).matches()) {
@@ -79,7 +79,7 @@ final class UI {
         }
     }
 
-    Statement getStatement() {
+    public Statement getStatement() {
         while (true) {
             System.out.println("The sentence should be of the format: 'It can/has/is ...'");
             final var input = readLine();
@@ -92,7 +92,7 @@ final class UI {
                     "It is a mammal ");
         }
     }
-    String readLine() {
+    public String readLine() {
         return scanner.nextLine().trim().toLowerCase();
     }
 
