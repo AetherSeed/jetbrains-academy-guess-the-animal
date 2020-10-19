@@ -54,6 +54,7 @@ public class KnowledgeTree {
         LOGGER.log(Level.FINER, "...entering method addAnimal(...)");
         final var newAnimal = new TreeNode(animal);
         final var oldAnimal = new TreeNode(current.getData());
+        isUpdated = false;
         current.setData(statement);
         current.setYes(isRight ? newAnimal : oldAnimal);
         current.setNo(isRight ? oldAnimal : newAnimal);
@@ -61,13 +62,11 @@ public class KnowledgeTree {
     }
 
     public Map<Animal, List<String>> getAnimals() {
-        if (isUpdated) {
-            return animals;
+        if (!isUpdated) {
+            animals.clear();
+            collectAnimals(root, new LinkedList<>());
+            isUpdated = true;
         }
-        animals.clear();
-        final var facts = new LinkedList<String>();
-        collectAnimals(root, facts);
-        isUpdated = true;
         return animals;
     }
 
