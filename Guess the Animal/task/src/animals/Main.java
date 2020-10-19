@@ -1,6 +1,7 @@
 package animals;
 
 import animals.repository.KnowledgeBase;
+import animals.ui.Application;
 
 import java.util.Arrays;
 import java.util.logging.Level;
@@ -10,7 +11,7 @@ public class Main {
     private static final Logger LOGGER = Logger.getLogger(Main.class.getName());
 
     public static void main(String[] args) {
-        LOGGER.log(Level.CONFIG, "Program started with arguments: {0}", Arrays.toString(args));
+        LOGGER.log(Level.CONFIG, "Program started with arguments: {0}.", Arrays.toString(args));
 
         final KnowledgeBase repository;
 
@@ -21,6 +22,8 @@ public class Main {
         }
 
         new Application(repository).run();
+
+        LOGGER.log(Level.FINE, "Program finished.");
     }
 
 }

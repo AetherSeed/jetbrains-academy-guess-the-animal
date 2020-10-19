@@ -1,5 +1,7 @@
 package animals.domain;
 
+import java.util.Objects;
+
 public final class Animal implements Question {
     private static final String VOWEL_ARTICLE = "an ";
     private static final String CONSONANT_ARTICLE = "a ";
@@ -38,4 +40,16 @@ public final class Animal implements Question {
     }
 
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Animal animal = (Animal) o;
+        return data.equals(animal.data);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(data);
+    }
 }
