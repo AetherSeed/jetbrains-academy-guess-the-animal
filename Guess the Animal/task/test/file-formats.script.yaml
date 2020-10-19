@@ -27,7 +27,7 @@
 - [input, dog]
 - - contains
   - Specify a fact that distinguishes a dog from a cat
-  - The program should ask a question
+  - The program should ask a question to distinguishes a dog from a cat
 - [input, It can climbs tree]
 - - contains
   - Is the statement correct for the dog?

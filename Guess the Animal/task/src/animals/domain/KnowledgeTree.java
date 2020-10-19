@@ -47,7 +47,7 @@ public class KnowledgeTree {
     }
 
     public String getData() {
-        return String.valueOf(current);
+        return current == null ? "Null" : current.getData();
     }
 
     public void addAnimal(final Animal animal, final Statement statement, final boolean isRight) {
