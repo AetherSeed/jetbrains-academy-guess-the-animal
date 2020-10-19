@@ -10,7 +10,7 @@ public class Application implements Runnable {
 
     private final KnowledgeBase knowledgeBase;
 
-    Application(final KnowledgeBase base) {
+    public Application(final KnowledgeBase base) {
         knowledgeBase = base;
     }
 
