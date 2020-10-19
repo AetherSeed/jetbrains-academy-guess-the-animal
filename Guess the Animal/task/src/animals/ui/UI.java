@@ -92,6 +92,7 @@ public final class UI {
                     "It is a mammal ");
         }
     }
+
     public String readLine() {
         return scanner.nextLine().trim().toLowerCase();
     }

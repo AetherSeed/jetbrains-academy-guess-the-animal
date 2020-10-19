@@ -1,62 +1,55 @@
-package animals.repository;
+package animals.domain;
 
-import animals.domain.Animal;
-import animals.domain.Statement;
-
-import java.util.Objects;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public abstract class KnowledgeTree implements KnowledgeBase {
+public class KnowledgeTree {
     private static final Logger LOGGER = Logger.getLogger(KnowledgeTree.class.getName());
-
-    protected TreeNode root;
+    private final Map<Animal, List<String>> animals = new HashMap<>();
     protected TreeNode current;
+    private TreeNode root;
+    private boolean isUpdated;
 
-    @Override
     public void reset() {
         current = root;
     }
 
-    @Override
     public String getQuestion() {
         final var data = current.getData();
         final var question = isAnimal() ? Animal.from(data) : Statement.from(data);
         return question.getQuestion();
     }
 
-    @Override
     public boolean isEmpty() {
         return Objects.isNull(root);
     }
 
-    @Override
     public boolean isAnimal() {
         return current.isLeaf();
     }
 
-    @Override
     public boolean isStatement() {
         return !isAnimal();
     }
 
-    @Override
+    public TreeNode getRoot() {
+        return root;
+    }
+
     public void setRoot(TreeNode root) {
         this.root = root;
         this.current = root;
     }
 
-    @Override
     public void next(boolean direction) {
         current = direction ? current.getYes() : current.getNo();
     }
 
-    @Override
     public String getData() {
-        return current.getData();
+        return String.valueOf(current);
     }
 
-    @Override
     public void addAnimal(final Animal animal, final Statement statement, final boolean isRight) {
         LOGGER.log(Level.FINER, "...entering method addAnimal(...)");
         final var newAnimal = new TreeNode(animal);
@@ -67,4 +60,28 @@ public abstract class KnowledgeTree implements KnowledgeBase {
         LOGGER.log(Level.FINER, "...added {0}, '{1}' - {2}", new Object[]{animal, statement, isRight});
     }
 
+    public Map<Animal, List<String>> getAnimals() {
+        if (isUpdated) {
+            return animals;
+        }
+        animals.clear();
+        final var facts = new LinkedList<String>();
+        collectAnimals(root, facts);
+        isUpdated = true;
+        return animals;
+    }
+
+    private void collectAnimals(final TreeNode node, final Deque<String> facts) {
+        if (node.isLeaf()) {
+            animals.put(Animal.from(node.getData()), List.copyOf(facts));
+            return;
+        }
+        final var statement = Statement.from(node.getData());
+        facts.add(statement.getPositiveFact());
+        collectAnimals(node.getYes(), facts);
+        facts.removeLast();
+        facts.add(statement.getNegativeFact());
+        collectAnimals(node.getNo(), facts);
+        facts.removeLast();
+    }
 }

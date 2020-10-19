@@ -1,49 +1,30 @@
 package animals.repository;
 
-import animals.domain.Animal;
-import animals.domain.Statement;
+import animals.domain.KnowledgeTree;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 
 public interface KnowledgeBase {
-    void reset();
-
-    String getData();
-
-    String getQuestion();
-
-    boolean isEmpty();
-
-    boolean isAnimal();
-
-    boolean isStatement();
-
-    void setRoot(TreeNode root);
-
-    void next(boolean direction);
-
-    void addAnimal(final Animal animal, final Statement statement, final boolean isRight);
-
-    boolean load();
-
-    boolean save();
-
     String FILENAME = "animals";
+
+    KnowledgeTree load();
+
+    boolean save(KnowledgeTree tree);
 
     enum Type {
         XML(new XmlMapper()),
         JSON(new JsonMapper()),
         YAML(new YAMLMapper()),
-        IN_MEMORY(new KnowledgeTree() {
+        IN_MEMORY(new KnowledgeBase() {
             @Override
-            public boolean load() {
-                return false;
+            public KnowledgeTree load() {
+                return new KnowledgeTree();
             }
 
             @Override
-            public boolean save() {
+            public boolean save(KnowledgeTree knowledgeTree) {
                 return false;
             }
         });
@@ -55,7 +36,7 @@ public interface KnowledgeBase {
         }
 
         Type(ObjectMapper objectMapper) {
-            this.repository = new KnowledgeTreeJackson(
+            this.repository = new KnowledgeBaseJackson(
                     objectMapper, FILENAME + "." + this.name().toLowerCase()
             );
         }
