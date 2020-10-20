@@ -3,7 +3,7 @@ package animals.ui;
 import animals.domain.Animal;
 import animals.domain.KnowledgeTree;
 
-public class Game implements Runnable {
+public final class Game implements Runnable {
     private final KnowledgeTree db;
     private final UI ui;
 
