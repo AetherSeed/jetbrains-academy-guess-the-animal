@@ -37,6 +37,7 @@ public final class Application implements Runnable {
                 .add("Play the guessing game", new Game(knowledgeTree, ui))
                 .add("List of all animals", services::printAnimals)
                 .add("Search for an animal", services::searchAnimal)
+                .add("Delete an animal", services::deleteAnimal)
                 .add("Knowledge Tree stats", services::printStatistics)
                 .run();
 

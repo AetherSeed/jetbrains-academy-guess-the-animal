@@ -40,7 +40,7 @@ public final class Services {
     }
 
     void searchAnimal() {
-        out.println("Enter the animal: ");
+        out.println("Enter an animal: ");
         final var animal = Animal.from(ui.readLine());
         final var animals = knowledgeTree.getAnimals();
         if (animals.containsKey(animal)) {
@@ -49,6 +49,20 @@ public final class Services {
             facts.forEach(fact -> out.println(" - " + fact));
         } else {
             out.println("The animal is not in my knowledge tree.");
+        }
+    }
+
+    void deleteAnimal() {
+        if (knowledgeTree.getRoot().isLeaf()) {
+            out.println("Can't delete the only animal from the root.");
+            return;
+        }
+        out.println("Enter an animal: ");
+        final var animal = Animal.from(ui.readLine());
+        if (knowledgeTree.deleteAnimal(null, knowledgeTree.getRoot(), animal.toString())) {
+            out.println("The " + animal.getName() + " was deleted from the knowledge base.");
+        } else {
+            out.println("The " + animal.getName() + " was not found in the knowledge base.");
         }
     }
 

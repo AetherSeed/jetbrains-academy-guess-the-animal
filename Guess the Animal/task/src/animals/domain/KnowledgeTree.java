@@ -9,7 +9,6 @@ public class KnowledgeTree {
     private final Map<Animal, List<String>> animals = new HashMap<>();
     protected TreeNode current;
     private TreeNode root;
-    private boolean isUpdated;
 
     public void reset() {
         current = root;
@@ -54,7 +53,6 @@ public class KnowledgeTree {
         LOGGER.log(Level.FINER, "...entering method addAnimal(...)");
         final var newAnimal = new TreeNode(animal);
         final var oldAnimal = new TreeNode(current.getData());
-        isUpdated = false;
         current.setData(statement);
         current.setYes(isRight ? newAnimal : oldAnimal);
         current.setNo(isRight ? oldAnimal : newAnimal);
@@ -62,11 +60,8 @@ public class KnowledgeTree {
     }
 
     public Map<Animal, List<String>> getAnimals() {
-        if (!isUpdated) {
-            animals.clear();
-            collectAnimals(root, new LinkedList<>());
-            isUpdated = true;
-        }
+        animals.clear();
+        collectAnimals(root, new LinkedList<>());
         return animals;
     }
 
@@ -82,5 +77,17 @@ public class KnowledgeTree {
         facts.add(statement.getNegativeFact());
         collectAnimals(node.getNo(), facts);
         facts.removeLast();
+    }
+
+    public boolean deleteAnimal(TreeNode parent, TreeNode child, String animal) {
+        if (child.isLeaf() && animal.equals(child.getData())) {
+            final var source = parent.getYes() == child ? parent.getNo() : parent.getYes();
+            parent.setData(source.getData());
+            parent.setYes(source.getYes());
+            parent.setNo(source.getNo());
+            return true;
+        }
+        return !child.isLeaf() &&
+                (deleteAnimal(child, child.getYes(), animal) || deleteAnimal(child, child.getNo(), animal));
     }
 }
