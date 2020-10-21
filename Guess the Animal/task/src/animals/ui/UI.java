@@ -1,11 +1,8 @@
 package animals.ui;
 
-import animals.domain.Animal;
 import animals.domain.Statement;
 
 import java.text.MessageFormat;
-import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.Scanner;
@@ -13,7 +10,6 @@ import java.util.regex.Pattern;
 
 import static java.lang.System.out;
 import static java.util.Objects.isNull;
-import static java.util.Objects.nonNull;
 
 public final class UI {
     private static final Pattern POSITIVE = Pattern.compile(
@@ -57,42 +53,6 @@ public final class UI {
             return pickMessage(message.split("\f"));
         }
         return message;
-    }
-
-    public void sayHello() {
-        final var messages = new ArrayList<String>();
-        final var time = LocalTime.now();
-        if (time.isAfter(LocalTime.NOON) && time.isBefore(LocalTime.of(18, 0))) {
-            messages.add("Good afternoon!");
-        } else if (time.isAfter(LocalTime.of(5, 0)) && time.isBefore(LocalTime.NOON)) {
-            messages.add("Good morning!");
-        } else if (time.isAfter(LocalTime.of(18, 0))) {
-            messages.add("Good evening!");
-        } else if (time.isAfter(LocalTime.MIDNIGHT) && time.isBefore(LocalTime.of(4, 0))) {
-            messages.add("Hi Night Owl!");
-        } else if (time.isAfter(LocalTime.of(4, 0))) {
-            messages.add("Hi Early Bird!");
-        }
-        messages.add("Hello!");
-        System.out.println(pickMessage(messages.toArray(String[]::new)));
-        System.out.println();
-    }
-
-    public void sayGoodbye() {
-        System.out.println();
-        System.out.println(pickMessage(new String[]{
-                "Bye!",
-                "Bye, bye!",
-                "See you later!",
-                "See you soon!",
-                "Talk to you later!",
-                "I’m off!",
-                "It was nice seeing you!",
-                "See ya!",
-                "See you later, alligator!",
-                "In a while, crocodile!",
-                "Have a nice one!"
-        }));
     }
 
     public boolean askYesNo() {
@@ -146,40 +106,6 @@ public final class UI {
     private String pickMessage(final String[] messages) {
         return messages[random.nextInt(messages.length)];
     }
-
-
-    public void sayLearnedMuch() {
-        System.out.print(pickMessage(new String[]{
-                "Nice!",
-                "Great!",
-                "Wonderful!"
-        }));
-        System.out.println(" I've learned so much about animals!");
-    }
-
-    public Animal askFavoriteAnimal() {
-        System.out.println("I want to learn about animals.");
-        System.out.println("Which animal do you like most?");
-        return Animal.from(readLine());
-    }
-
-    public void sayThinkAnimal() {
-        System.out.println("You think of an animal, and I guess it.");
-        System.out.println("Press enter when you're ready.");
-        scanner.nextLine();
-    }
-
-    public void askNewGame() {
-        System.out.println(pickMessage(new String[]{
-                "That was funny! Want to try again?",
-                "Do you like to play again?",
-                "It was nice to play with you! Do you want to repeat?",
-                "It was a pleasure for me to know you better! Want to play again?",
-                "Thank you for playing! One more game?",
-                "Thank you! I had too much fun! Do you want to play again?"
-        }));
-    }
-
 
     public void pause() {
         scanner.nextLine();
