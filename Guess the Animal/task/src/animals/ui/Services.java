@@ -18,7 +18,7 @@ public final class Services {
         this.ui = ui;
     }
 
-    void printAnimals() {
+    void listAnimals() {
         out.println("Here are the animals I know:");
         knowledgeTree.getAnimals().keySet().stream()
                 .map(Animal::getName)
@@ -27,7 +27,7 @@ public final class Services {
                 .forEach(out::println);
     }
 
-    void printStatistics() {
+    void statistics() {
         final var stats = knowledgeTree.getAnimals().values().stream()
                 .mapToInt(List::size).summaryStatistics();
 

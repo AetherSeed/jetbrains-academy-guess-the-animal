@@ -34,10 +34,10 @@ public final class Application implements Runnable {
 
         new Menu("main-menu")
                 .add("play", new Game(knowledgeTree))
-                .add("list", services::printAnimals)
+                .add("list", services::listAnimals)
                 .add("search", services::searchAnimal)
                 .add("delete", services::deleteAnimal)
-                .add("statistics", services::printStatistics)
+                .add("statistics", services::statistics)
                 .add("print", services::printTree)
                 .run();
 
