@@ -1,21 +1,25 @@
 package animals.ui;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.Scanner;
+
+import static java.util.Objects.nonNull;
 
 public class Menu implements Runnable {
     private static final Scanner scanner = new Scanner(System.in);
     private final List<Entry> menu = new ArrayList<>();
     private final String title;
     private boolean once;
+    private final ResourceBundle bundle;
+    private final String exitMessage;
 
-    public Menu() {
-        title = "";
-    }
-
-    public Menu(final String title) {
-        this.title = String.format("%n%s%n", title);
+    public Menu(final String bundleName) {
+        this.bundle = ResourceBundle.getBundle(bundleName);
+        this.title = String.format("%n%s%n", bundle.getString("title"));
+        exitMessage = " 0. " + bundle.getString("exit");
     }
 
     public Menu once() {
@@ -23,8 +27,10 @@ public class Menu implements Runnable {
         return this;
     }
 
-    public Menu add(final String entry, final Runnable action) {
-        menu.add(new Entry(String.format("%2d. %s", menu.size() + 1, entry), action));
+    public Menu add(final String key, final Runnable action) {
+        final var menuNumber = menu.size() + 1;
+        final String entry = nonNull(bundle) ? bundle.getString(key) : key;
+        menu.add(new Entry(String.format("%2d. %s", menuNumber, entry), action));
         return this;
     }
 
@@ -33,7 +39,8 @@ public class Menu implements Runnable {
         do {
             System.out.println(title);
             menu.forEach(System.out::println);
-            System.out.println(" 0. Exit");
+            System.out.println(exitMessage);
+            System.out.print(" ");
             try {
                 final int choice = Integer.parseInt(scanner.nextLine()) - 1;
                 if (choice == -1) {
@@ -41,7 +48,10 @@ public class Menu implements Runnable {
                 }
                 menu.get(choice).run();
             } catch (NumberFormatException | IndexOutOfBoundsException e) {
-                System.out.println("Please enter the number from 0 up to " + menu.size());
+                final var msg = nonNull(bundle)
+                        ? bundle.getString("error")
+                        : "Please enter the number from 0 up to {0}";
+                System.out.println(MessageFormat.format(msg, menu.size()));
             }
         } while (!once);
     }

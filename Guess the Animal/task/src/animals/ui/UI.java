@@ -3,19 +3,61 @@ package animals.ui;
 import animals.domain.Animal;
 import animals.domain.Statement;
 
+import java.text.MessageFormat;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.ResourceBundle;
 import java.util.Scanner;
 import java.util.regex.Pattern;
+
+import static java.lang.System.out;
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 
 public final class UI {
     private static final Pattern POSITIVE = Pattern.compile(
             "(y|yes|yeah|yep|sure|right|affirmative|correct|indeed|you bet|exactly|you said it)[.!]?");
     private static final Pattern NEGATIVE = Pattern.compile(
             "(n|no( way)?|nah|nope|negative|i don't think so|yeah no)[.!]?");
+
     private static final Scanner scanner = new Scanner(System.in);
     private static final Random random = new Random();
+    private final ResourceBundle resourceBundle;
+
+    public UI(final String messages) {
+        this.resourceBundle = ResourceBundle.getBundle(messages);
+    }
+
+    public void println(String key, Object... args) {
+        out.println(MessageFormat.format(getText(key), args));
+    }
+
+    public void print(String key, Object... args) {
+        out.print(MessageFormat.format(getText(key), args));
+    }
+
+    public void printf(String key, Object... args) {
+        out.printf(getText(key), args);
+    }
+
+    public void println() {
+        out.println();
+    }
+
+    private String getText(String key) {
+        if (isNull(resourceBundle) || !resourceBundle.containsKey(key)) {
+            return key;
+        }
+        if (resourceBundle.getObject(key) instanceof String[]) {
+            return pickMessage(resourceBundle.getStringArray(key));
+        }
+        final var message = resourceBundle.getString(key);
+        if (message.indexOf('\f') > 0) {
+            return pickMessage(message.split("\f"));
+        }
+        return message;
+    }
 
     public void sayHello() {
         final var messages = new ArrayList<String>();
@@ -93,6 +135,10 @@ public final class UI {
         }
     }
 
+    public boolean isCorrect(String key, String data) {
+        return data.matches(resourceBundle.getString(key));
+    }
+
     public String readLine() {
         return scanner.nextLine().trim().toLowerCase();
     }
@@ -133,4 +179,10 @@ public final class UI {
                 "Thank you! I had too much fun! Do you want to play again?"
         }));
     }
+
+
+    public void pause() {
+        scanner.nextLine();
+    }
+
 }

@@ -83,4 +83,10 @@ public final class Services {
         printNode(node.getYes(), true, prefix);
         printNode(node.getNo(), false, prefix);
     }
+
+    public Animal askFavoriteAnimal() {
+        System.out.println("I want to learn about animals.");
+        System.out.println("Which animal do you like most?");
+        return Animal.from(ui.readLine());
+    }
 }

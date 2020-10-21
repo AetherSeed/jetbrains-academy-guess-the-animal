@@ -1,49 +1,50 @@
 package animals.ui;
 
-import animals.domain.Animal;
 import animals.domain.KnowledgeTree;
 import animals.domain.TreeNode;
 import animals.repository.KnowledgeBase;
 
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static java.lang.System.out;
-
 public final class Application implements Runnable {
     private static final Logger LOGGER = Logger.getLogger(Application.class.getName());
-    private static final UI ui = new UI();
+    private static final UI greetings = new UI("animals.localization.Greetings");
     private final KnowledgeBase repository;
     private final KnowledgeTree knowledgeTree;
+    private final Services services;
 
     public Application(final KnowledgeBase repository) {
         this.repository = repository;
         this.knowledgeTree = repository.load();
+        services = new Services(knowledgeTree, new UI("services"));
     }
 
     public void run() {
         LOGGER.log(Level.FINE, "Application started.");
-        ui.sayHello();
+
+        greetings.println("hi");
+        greetings.println();
 
         if (knowledgeTree.isEmpty()) {
-            knowledgeTree.setRoot(new TreeNode(ui.askFavoriteAnimal()));
+            knowledgeTree.setRoot(
+                    new TreeNode(services.askFavoriteAnimal()));
         }
-        final var services = new Services(knowledgeTree, ui);
+        greetings.println("welcome");
 
-        out.println("Welcome to the animal expert system!");
-
-        new Menu("What do you want to do:")
-                .add("Play the guessing game", new Game(knowledgeTree, ui))
-                .add("List of all animals", services::printAnimals)
-                .add("Search for an animal", services::searchAnimal)
-                .add("Delete an animal", services::deleteAnimal)
-                .add("Calculate statistics", services::printStatistics)
-                .add("Print the Knowledge Tree", services::printTree)
+        new Menu("main-menu")
+                .add("play", new Game(knowledgeTree))
+                .add("list", services::printAnimals)
+                .add("search", services::searchAnimal)
+                .add("delete", services::deleteAnimal)
+                .add("statistics", services::printStatistics)
+                .add("print", services::printTree)
                 .run();
 
         repository.save(knowledgeTree);
-        ui.sayGoodbye();
+        greetings.println();
+        greetings.println("bye");
+
         LOGGER.log(Level.FINE, "Application finished.");
     }
 

@@ -2,49 +2,75 @@ package animals.ui;
 
 import animals.domain.Animal;
 import animals.domain.KnowledgeTree;
+import animals.domain.Statement;
+
+import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public final class Game implements Runnable {
+    private static final Logger LOG = Logger.getLogger(Game.class.getName());
+    private static final UI ui = new UI("game");
+
     private final KnowledgeTree db;
-    private final UI ui;
 
-    public Game(KnowledgeTree db, UI ui) {
+    public Game(KnowledgeTree db) {
         this.db = db;
-        this.ui = ui;
-
     }
 
     public void run() {
         do {
-            ui.sayThinkAnimal();
+            ui.println("think");
+            ui.println("enter");
+            ui.pause();
 
             while (db.isStatement()) {
-                System.out.println(db.getQuestion());
+                ui.println(db.getQuestion());
                 db.next(ui.askYesNo());
             }
 
-            System.out.println(db.getQuestion());
-            final boolean isGuessedWrong = !ui.askYesNo();
+            ui.println(db.getQuestion());
 
-            if (isGuessedWrong) {
-                System.out.println("I give up. What animal do you have in mind?");
-
-                final var animal = Animal.from(ui.readLine());
-                final var guessedAnimal = Animal.from(db.getData());
-
-                System.out.printf("Specify a fact that distinguishes %s from %s:%n", animal, db.getData());
-                final var statement = ui.getStatement();
-                System.out.println("Is the statement correct for the " + animal.getName() + "?");
-                final var isCorrect = ui.askYesNo();
-                db.addAnimal(animal, statement, isCorrect);
-
-                System.out.println("I learned the following facts about animals:");
-                System.out.println(" - " + statement.getFact(guessedAnimal, !isCorrect));
-                System.out.println(" - " + statement.getFact(animal, isCorrect));
-                ui.sayLearnedMuch();
+            if (!ui.askYesNo()) {
+                giveUp();
             }
+
             db.reset();
-            ui.askNewGame();
+            ui.print("thanks");
+            ui.println("again");
+
         } while (ui.askYesNo());
     }
 
+    private void giveUp() {
+        ui.println("give.up");
+        final var animal = Animal.from(ui.readLine());
+        final var guessedAnimal = Animal.from(db.getData());
+        ui.println("specify.fact", animal, guessedAnimal);
+        final var statement = getStatement();
+
+        ui.println("is.correct", animal.getName());
+        final var isCorrect = ui.askYesNo();
+        db.addAnimal(animal, statement, isCorrect);
+        ui.println("learned");
+        ui.println("print.fact", statement.getFact(guessedAnimal, !isCorrect));
+        ui.println("print.fact", statement.getFact(animal, isCorrect));
+        ui.print("nice");
+        ui.println("know.more");
+    }
+
+    public Statement getStatement() {
+        while (true) {
+            ui.println("statement.format");
+            final var statement = ui.readLine();
+            if (ui.isCorrect("statement.negative", statement)) {
+                ui.println("statement.error");
+            } else if (ui.isCorrect("statement.regex", statement)) {
+                return Statement.from(statement);
+            }
+            LOG.log(Level.INFO, "Statement: {0}", statement);
+            LOG.log(Level.INFO, "Regexp: {0}", ResourceBundle.getBundle("game").getString("statement.regex"));
+            ui.println("statement.example");
+        }
+    }
 }
