@@ -69,7 +69,8 @@ public final class Services {
     }
 
     void printTree() {
-        printNode(knowledgeTree.getRoot(), false, "");
+        out.println("\n ┄");
+        printNode(knowledgeTree.getRoot(), false, " ");
     }
 
     private void printNode(TreeNode node, boolean isYes, String prefix) {
