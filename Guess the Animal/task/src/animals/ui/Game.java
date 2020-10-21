@@ -45,8 +45,6 @@ public final class Game implements Runnable {
             db.reset();
             ui.askNewGame();
         } while (ui.askYesNo());
-
-        ui.sayGoodbye();
     }
 
 }
