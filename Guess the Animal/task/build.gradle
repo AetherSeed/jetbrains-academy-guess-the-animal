@@ -1,0 +1,10 @@
+
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Main-Class': 'animals.Main'
+    }
+    version '1.7'
+    archiveBaseName = "stage5"
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
