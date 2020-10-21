@@ -38,7 +38,8 @@ public final class Application implements Runnable {
                 .add("List of all animals", services::printAnimals)
                 .add("Search for an animal", services::searchAnimal)
                 .add("Delete an animal", services::deleteAnimal)
-                .add("Knowledge Tree stats", services::printStatistics)
+                .add("Calculate statistics", services::printStatistics)
+                .add("Print the Knowledge Tree", services::printTree)
                 .run();
 
         repository.save(knowledgeTree);

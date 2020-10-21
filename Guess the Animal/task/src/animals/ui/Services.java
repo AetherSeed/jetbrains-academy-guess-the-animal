@@ -2,6 +2,8 @@ package animals.ui;
 
 import animals.domain.Animal;
 import animals.domain.KnowledgeTree;
+import animals.domain.Statement;
+import animals.domain.TreeNode;
 
 import java.util.List;
 
@@ -66,4 +68,18 @@ public final class Services {
         }
     }
 
+    void printTree() {
+        printNode(knowledgeTree.getRoot(), false, "");
+    }
+
+    private void printNode(TreeNode node, boolean isYes, String prefix) {
+        if (node.isLeaf()) {
+            out.printf("%s%c %s%n", prefix, isYes ? '├' : '└', node.getData());
+            return;
+        }
+        out.printf("%s%c %s%n", prefix, isYes ? '├' : '└', Statement.from(node.getData()).getQuestion());
+        prefix += isYes ? '│' : ' ';
+        printNode(node.getYes(), true, prefix);
+        printNode(node.getNo(), false, prefix);
+    }
 }
