@@ -33,10 +33,10 @@ public class LanguageRules_eo extends ListResourceBundle {
                 {"positiveFact", (UnaryOperator<String>) data -> capitalize(data + ".")},
 
                 {"generatePositiveFact", (BiFunction<String, String, String>) (statement, animal) ->
-                        statement.replaceFirst("ĝi ", "La " + animal) + "."
+                        statement.replaceFirst("ĝi", "La " + animal) + "."
                 },
                 {"generateNegativeFact", (BiFunction<String, String, String>) (statement, animal) ->
-                        statement.replaceFirst("ĝi ", "La " + animal + " ne") + "."
+                        statement.replaceFirst("ĝi", "La " + animal + " ne") + "."
                 },
                 {"isPositiveAnswer", (Predicate<String>) data -> POSITIVE_ANSWER.matcher(data).matches()},
                 {"isNegativeAnswer", (Predicate<String>) data -> NEGATIVE_ANSWER.matcher(data).matches()}
