@@ -12,9 +12,9 @@ public class Menu implements Runnable {
     private static final Scanner scanner = new Scanner(System.in);
     private final List<Entry> menu = new ArrayList<>();
     private final String title;
-    private boolean once;
     private final ResourceBundle bundle;
     private final String exitMessage;
+    private boolean once;
 
     public Menu(final String bundleName) {
         this.bundle = ResourceBundle.getBundle(bundleName);
@@ -75,4 +75,5 @@ public class Menu implements Runnable {
             action.run();
         }
     }
+
 }

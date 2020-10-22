@@ -1,6 +1,8 @@
 package animals.ui;
 
-import animals.domain.*;
+import animals.domain.KnowledgeTree;
+import animals.domain.LanguageRules;
+import animals.domain.TreeNode;
 
 import static java.lang.System.out;
 
@@ -72,6 +74,5 @@ public final class TreeServices {
         printNode(node.getYes(), true, prefix);
         printNode(node.getNo(), false, prefix);
     }
-
 
 }

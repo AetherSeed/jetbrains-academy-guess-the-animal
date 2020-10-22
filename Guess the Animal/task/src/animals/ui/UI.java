@@ -13,8 +13,8 @@ public final class UI {
     private static final Random random = new Random();
     private final ResourceBundle resourceBundle;
 
-    public UI(final String messages) {
-        this.resourceBundle = ResourceBundle.getBundle(messages);
+    public UI(final String bundleName) {
+        this.resourceBundle = ResourceBundle.getBundle(bundleName);
     }
 
     public void println(String key, Object... args) {
@@ -33,6 +33,18 @@ public final class UI {
         out.println();
     }
 
+    public String readLine() {
+        return scanner.nextLine().trim().toLowerCase();
+    }
+
+    private String pickMessage(final String[] messages) {
+        return messages[random.nextInt(messages.length)];
+    }
+
+    public void pause() {
+        scanner.nextLine();
+    }
+
     private String getText(String key) {
         if (isNull(resourceBundle) || !resourceBundle.containsKey(key)) {
             return key;
@@ -45,19 +57,6 @@ public final class UI {
             return pickMessage(message.split("\f"));
         }
         return message;
-    }
-
-
-    public String readLine() {
-        return scanner.nextLine().trim().toLowerCase();
-    }
-
-    private String pickMessage(final String[] messages) {
-        return messages[random.nextInt(messages.length)];
-    }
-
-    public void pause() {
-        scanner.nextLine();
     }
 
 }
