@@ -59,6 +59,16 @@ public class KnowledgeTree {
         LOGGER.log(Level.FINER, "...added {0}, '{1}' - {2}", new Object[]{animal, statement, isRight});
     }
 
+    public void addAnimal(final String animal, final String statement, final boolean isRight) {
+        LOGGER.log(Level.FINER, "...entering method addAnimal(...)");
+        final var newAnimal = new TreeNode(animal);
+        final var oldAnimal = new TreeNode(current.getData());
+        current.setData(statement);
+        current.setYes(isRight ? newAnimal : oldAnimal);
+        current.setNo(isRight ? oldAnimal : newAnimal);
+        LOGGER.log(Level.FINER, "...added {0}, '{1}' - {2}", new Object[]{animal, statement, isRight});
+    }
+
     public Map<Animal, List<String>> getAnimals() {
         animals.clear();
         collectAnimals(root, new LinkedList<>());

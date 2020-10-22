@@ -1,16 +1,15 @@
 package animals.ui;
 
-import animals.domain.Animal;
 import animals.domain.KnowledgeTree;
-import animals.domain.Statement;
+import animals.domain.LanguageRules;
 
-import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public final class Game implements Runnable {
     private static final Logger LOG = Logger.getLogger(Game.class.getName());
     private static final UI ui = new UI("game");
+//    private static final Services service = new Services();
 
     private final KnowledgeTree db;
 
@@ -44,32 +43,29 @@ public final class Game implements Runnable {
 
     private void giveUp() {
         ui.println("give.up");
-        final var animal = Animal.from(ui.readLine());
-        final var guessedAnimal = Animal.from(db.getData());
+        final var animal = LanguageRules.ANIMAL.apply(ui.readLine());
+        final var guessedAnimal = db.getData();
         ui.println("specify.fact", animal, guessedAnimal);
-        final var statement = getStatement();
+        final var statement = getStatement().toString();
 
-        ui.println("is.correct", animal.getName());
+        ui.println("is.correct", LanguageRules.ANIMAL_NAME.apply(animal));
         final var isCorrect = ui.askYesNo();
         db.addAnimal(animal, statement, isCorrect);
         ui.println("learned");
-        ui.println("print.fact", statement.getFact(guessedAnimal, !isCorrect));
-        ui.println("print.fact", statement.getFact(animal, isCorrect));
+        ui.println("print.fact", LanguageRules.FACT_GENERATOR.apply(!isCorrect).apply(statement, guessedAnimal));
+        ui.println("print.fact", LanguageRules.FACT_GENERATOR.apply(isCorrect).apply(statement, animal));
         ui.print("nice");
         ui.println("know.more");
     }
 
-    public Statement getStatement() {
+    public String getStatement() {
         while (true) {
             ui.println("statement.format");
-            final var statement = ui.readLine();
-            if (ui.isCorrect("statement.negative", statement)) {
-                ui.println("statement.error");
-            } else if (ui.isCorrect("statement.regex", statement)) {
-                return Statement.from(statement);
+            final var input = ui.readLine();
+            if (LanguageRules.IS_CORRECT_STATEMENT.test(input)) {
+                return LanguageRules.STATEMENT.apply(input);
             }
-            LOG.log(Level.INFO, "Statement: {0}", statement);
-            LOG.log(Level.INFO, "Regexp: {0}", ResourceBundle.getBundle("game").getString("statement.regex"));
+            LOG.log(Level.INFO, "Statement is not correct: {0}", input);
             ui.println("statement.example");
         }
     }

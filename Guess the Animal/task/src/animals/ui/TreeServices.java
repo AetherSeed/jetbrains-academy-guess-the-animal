@@ -1,21 +1,17 @@
 package animals.ui;
 
-import animals.domain.Animal;
-import animals.domain.KnowledgeTree;
-import animals.domain.Statement;
-import animals.domain.TreeNode;
+import animals.domain.*;
 
 import java.util.List;
 
 import static java.lang.System.out;
 
-public final class Services {
+public final class TreeServices {
+    private static final UI ui = new UI("services");
     private final KnowledgeTree knowledgeTree;
-    private final UI ui;
 
-    public Services(KnowledgeTree knowledgeTree, UI ui) {
+    public TreeServices(KnowledgeTree knowledgeTree) {
         this.knowledgeTree = knowledgeTree;
-        this.ui = ui;
     }
 
     void listAnimals() {
@@ -88,5 +84,18 @@ public final class Services {
         System.out.println("I want to learn about animals.");
         System.out.println("Which animal do you like most?");
         return Animal.from(ui.readLine());
+    }
+
+    public boolean askYesNo() {
+        while (true) {
+            final var respond = ui.readLine();
+            if (LanguageRules.IS_POSITIVE_ANSWER.test(respond)) {
+                return true;
+            }
+            if (LanguageRules.IS_NEGATIVE_ANSWER.test(respond)) {
+                return false;
+            }
+            ui.println("ask.again");
+        }
     }
 }

@@ -12,12 +12,12 @@ public final class Application implements Runnable {
     private static final UI greetings = new UI("animals.localization.Greetings");
     private final KnowledgeBase repository;
     private final KnowledgeTree knowledgeTree;
-    private final Services services;
+    private final TreeServices treeServices;
 
     public Application(final KnowledgeBase repository) {
         this.repository = repository;
         this.knowledgeTree = repository.load();
-        services = new Services(knowledgeTree, new UI("services"));
+        treeServices = new TreeServices(knowledgeTree);
     }
 
     public void run() {
@@ -28,17 +28,17 @@ public final class Application implements Runnable {
 
         if (knowledgeTree.isEmpty()) {
             knowledgeTree.setRoot(
-                    new TreeNode(services.askFavoriteAnimal()));
+                    new TreeNode(treeServices.askFavoriteAnimal()));
         }
         greetings.println("welcome");
 
         new Menu("main-menu")
                 .add("play", new Game(knowledgeTree))
-                .add("list", services::listAnimals)
-                .add("search", services::searchAnimal)
-                .add("delete", services::deleteAnimal)
-                .add("statistics", services::statistics)
-                .add("print", services::printTree)
+                .add("list", treeServices::listAnimals)
+                .add("search", treeServices::searchAnimal)
+                .add("delete", treeServices::deleteAnimal)
+                .add("statistics", treeServices::statistics)
+                .add("print", treeServices::printTree)
                 .run();
 
         repository.save(knowledgeTree);
