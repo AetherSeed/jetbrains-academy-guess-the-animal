@@ -51,13 +51,10 @@ public final class TreeServices {
             out.println("Can't delete the only animal from the root.");
             return;
         }
-        out.println("Enter an animal: ");
-        final var animal = Animal.from(ui.readLine());
-        if (knowledgeTree.deleteAnimal(null, knowledgeTree.getRoot(), animal.toString())) {
-            out.println("The " + animal.getName() + " was deleted from the knowledge base.");
-        } else {
-            out.println("The " + animal.getName() + " was not found in the knowledge base.");
-        }
+        ui.println("delete.animal");
+        final var animal = Services.askAnimal();
+        final var isOk = knowledgeTree.deleteAnimal(null, knowledgeTree.getRoot(), animal);
+        ui.println(isOk ? "delete.successful" : "deleted.fail", LanguageRules.ANIMAL_NAME.apply(animal));
     }
 
     void printTree() {
