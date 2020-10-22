@@ -4,6 +4,8 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static java.util.stream.Collectors.summarizingInt;
+
 public class KnowledgeTree {
     private static final Logger LOGGER = Logger.getLogger(KnowledgeTree.class.getName());
     private final Map<Animal, List<String>> animals = new HashMap<>();
@@ -49,14 +51,8 @@ public class KnowledgeTree {
         return current == null ? "Null" : current.getData();
     }
 
-    public void addAnimal(final Animal animal, final Statement statement, final boolean isRight) {
-        LOGGER.log(Level.FINER, "...entering method addAnimal(...)");
-        final var newAnimal = new TreeNode(animal);
-        final var oldAnimal = new TreeNode(current.getData());
-        current.setData(statement);
-        current.setYes(isRight ? newAnimal : oldAnimal);
-        current.setNo(isRight ? oldAnimal : newAnimal);
-        LOGGER.log(Level.FINER, "...added {0}, '{1}' - {2}", new Object[]{animal, statement, isRight});
+    public IntSummaryStatistics getStatistics() {
+        return getAnimals().values().stream().collect(summarizingInt(List::size));
     }
 
     public void addAnimal(final String animal, final String statement, final boolean isRight) {

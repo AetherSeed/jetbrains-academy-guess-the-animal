@@ -1,7 +1,5 @@
 package animals.ui;
 
-import animals.domain.LanguageRules;
-
 import java.text.MessageFormat;
 import java.util.Random;
 import java.util.ResourceBundle;
@@ -49,31 +47,6 @@ public final class UI {
         return message;
     }
 
-    public boolean askYesNo() {
-        while (true) {
-            final var respond = readLine();
-            if (LanguageRules.IS_POSITIVE_ANSWER.test(respond)) {
-                return true;
-            }
-            if (LanguageRules.IS_NEGATIVE_ANSWER.test(respond)) {
-                return false;
-            }
-            System.out.println(pickMessage(new String[]{
-                    "Come on, yes or no?",
-                    "Please enter yes or no.",
-                    "Funny, I still don't understand, is it yes or no?",
-                    "Sorry, it must be yes or no.",
-                    "Let's try again: yes or no?",
-                    "I'm not sure I caught you: was it yes or no?",
-                    "Oh, it's too complicated for me: just say me yes or no.",
-                    "I'm filling a bit intrigued: just say yes or no.",
-                    "I am a bit confused, give me a simple answer: yes or no",
-                    "Oh, no, don't try to confuse me: say yes or no.",
-                    "Could you please simply say yes or no?",
-                    "Sorry, may l ask you again: was it yes or no?"
-            }));
-        }
-    }
 
     public String readLine() {
         return scanner.nextLine().trim().toLowerCase();

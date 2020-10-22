@@ -6,10 +6,11 @@ import animals.domain.LanguageRules;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static animals.ui.Services.askYesNo;
+
 public final class Game implements Runnable {
     private static final Logger LOG = Logger.getLogger(Game.class.getName());
     private static final UI ui = new UI("game");
-//    private static final Services service = new Services();
 
     private final KnowledgeTree db;
 
@@ -25,12 +26,12 @@ public final class Game implements Runnable {
 
             while (db.isStatement()) {
                 ui.println(db.getQuestion());
-                db.next(ui.askYesNo());
+                db.next(askYesNo());
             }
 
             ui.println(db.getQuestion());
 
-            if (!ui.askYesNo()) {
+            if (!askYesNo()) {
                 giveUp();
             }
 
@@ -38,7 +39,7 @@ public final class Game implements Runnable {
             ui.print("thanks");
             ui.println("again");
 
-        } while (ui.askYesNo());
+        } while (askYesNo());
     }
 
     private void giveUp() {
@@ -46,10 +47,10 @@ public final class Game implements Runnable {
         final var animal = LanguageRules.ANIMAL.apply(ui.readLine());
         final var guessedAnimal = db.getData();
         ui.println("specify.fact", animal, guessedAnimal);
-        final var statement = getStatement().toString();
+        final var statement = getStatement();
 
         ui.println("is.correct", LanguageRules.ANIMAL_NAME.apply(animal));
-        final var isCorrect = ui.askYesNo();
+        final var isCorrect = askYesNo();
         db.addAnimal(animal, statement, isCorrect);
         ui.println("learned");
         ui.println("print.fact", LanguageRules.FACT_GENERATOR.apply(!isCorrect).apply(statement, guessedAnimal));

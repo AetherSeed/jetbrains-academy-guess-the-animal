@@ -16,6 +16,10 @@ public class TreeNode {
         this.data = data.toString();
     }
 
+    public TreeNode(final String data) {
+        this.data = data;
+    }
+
     @JsonIgnore
     public boolean isLeaf() {
         return no == null && yes == null;

@@ -28,7 +28,7 @@ public final class Application implements Runnable {
 
         if (knowledgeTree.isEmpty()) {
             knowledgeTree.setRoot(
-                    new TreeNode(treeServices.askFavoriteAnimal()));
+                    new TreeNode(Services.askFavoriteAnimal()));
         }
         greetings.println("welcome");
 
