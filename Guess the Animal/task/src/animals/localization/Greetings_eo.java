@@ -11,17 +11,17 @@ public class Greetings_eo extends ListResourceBundle {
         final var messages = new ArrayList<String>();
         final var time = LocalTime.now();
         if (time.isAfter(LocalTime.NOON) && time.isBefore(LocalTime.of(18, 0))) {
-            messages.add("Good afternoon!");
+            messages.add("Bonan tagon!");
         } else if (time.isAfter(LocalTime.of(5, 0)) && time.isBefore(LocalTime.NOON)) {
-            messages.add("Good morning!");
+            messages.add("Bonan matenon!");
         } else if (time.isAfter(LocalTime.of(18, 0))) {
-            messages.add("Good evening!");
+            messages.add("Bonan vesperon!");
         } else if (time.isAfter(LocalTime.MIDNIGHT) && time.isBefore(LocalTime.of(4, 0))) {
-            messages.add("Hi Night Owl!");
+            messages.add("Saluton Nokta Strigo!");
         } else if (time.isAfter(LocalTime.of(4, 0))) {
-            messages.add("Hi Early Bird!");
+            messages.add("Saluton Frua Birdo!");
         }
-        messages.add("Hello!");
+        messages.add("Saluton!");
         greetings = messages.toArray(String[]::new);
     }
 
@@ -29,23 +29,11 @@ public class Greetings_eo extends ListResourceBundle {
     protected Object[][] getContents() {
         return new Object[][]{
                 {"hi", greetings},
-                {"welcome", "Welcome to the animal's expert system!"},
                 {"bye", new String[]{
-                        "Bye!",
-                        "Bye, bye!",
-                        "See you later!",
-                        "See you soon!",
-                        "Talk to you later!",
-                        "I’m off!",
-                        "It was nice seeing you!",
-                        "See ya!",
-                        "See you later, alligator!",
-                        "In a while, crocodile!",
-                        "Hasta la vista, baby!",
-                        "Adios, amigos!",
-                        "Au revoir!",
-                        "Adieu!",
-                        "Have a nice one!"
-                }}};
+                        "Ĝis!",
+                        "Ĝis revido!",
+                        "Estis agrable vidi vin!"
+                }}
+        };
     }
 }
