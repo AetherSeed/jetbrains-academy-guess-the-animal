@@ -54,7 +54,7 @@ public final class TreeServices {
         ui.println("delete.animal");
         final var animal = Services.askAnimal();
         final var isOk = knowledgeTree.deleteAnimal(null, knowledgeTree.getRoot(), animal);
-        ui.println(isOk ? "delete.successful" : "deleted.fail", LanguageRules.ANIMAL_NAME.apply(animal));
+        ui.println(isOk ? "delete.successful" : "delete.fail", LanguageRules.ANIMAL_NAME.apply(animal));
     }
 
     void printTree() {
