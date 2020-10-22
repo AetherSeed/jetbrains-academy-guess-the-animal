@@ -70,7 +70,7 @@ public final class TreeServices {
             out.printf("%s%c %s%n", prefix, isYes ? '├' : '└', node.getData());
             return;
         }
-        out.printf("%s%c %s%n", prefix, isYes ? '├' : '└', Statement.from(node.getData()).getQuestion());
+        out.printf("%s%c %s%n", prefix, isYes ? '├' : '└', LanguageRules.STATEMENT_QUESTION.apply(node.getData()));
         prefix += isYes ? '│' : ' ';
         printNode(node.getYes(), true, prefix);
         printNode(node.getNo(), false, prefix);

@@ -17,9 +17,8 @@ public class KnowledgeTree {
     }
 
     public String getQuestion() {
-        final var data = current.getData();
-        final var question = isAnimal() ? Animal.from(data) : Statement.from(data);
-        return question.getQuestion();
+        final var question = isAnimal() ? LanguageRules.ANIMAL_QUESTION : LanguageRules.STATEMENT_QUESTION;
+        return question.apply(current.getData());
     }
 
     public boolean isEmpty() {
@@ -76,11 +75,11 @@ public class KnowledgeTree {
             animals.put(node.getData(), List.copyOf(facts));
             return;
         }
-        final var statement = Statement.from(node.getData());
-        facts.add(statement.getPositiveFact());
+        final var statement = node.getData();
+        facts.add(LanguageRules.POSITIVE_FACT.apply(statement));
         collectAnimals(node.getYes(), facts);
         facts.removeLast();
-        facts.add(statement.getNegativeFact());
+        facts.add(LanguageRules.NEGATIVE_FACT.apply(statement));
         collectAnimals(node.getNo(), facts);
         facts.removeLast();
     }
