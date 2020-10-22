@@ -12,8 +12,8 @@ public class TreeNode {
     TreeNode() {
     }
 
-    public TreeNode(final Object data) {
-        this.data = data.toString();
+    public TreeNode(final String data) {
+        this.data = data;
     }
 
     @JsonIgnore

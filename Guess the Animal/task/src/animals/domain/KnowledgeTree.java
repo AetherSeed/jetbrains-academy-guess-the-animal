@@ -4,10 +4,12 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static java.util.stream.Collectors.summarizingInt;
+
 public class KnowledgeTree {
     private static final Logger LOGGER = Logger.getLogger(KnowledgeTree.class.getName());
-    private final Map<Animal, List<String>> animals = new HashMap<>();
-    protected TreeNode current;
+    private final Map<String, List<String>> animals = new HashMap<>();
+    private TreeNode current;
     private TreeNode root;
 
     public void reset() {
@@ -15,9 +17,9 @@ public class KnowledgeTree {
     }
 
     public String getQuestion() {
-        final var data = current.getData();
-        final var question = isAnimal() ? Animal.from(data) : Statement.from(data);
-        return question.getQuestion();
+        final var question =
+                current.isLeaf() ? LanguageRules.ANIMAL_QUESTION : LanguageRules.STATEMENT_QUESTION;
+        return question.apply(current.getData());
     }
 
     public boolean isEmpty() {
@@ -49,7 +51,11 @@ public class KnowledgeTree {
         return current == null ? "Null" : current.getData();
     }
 
-    public void addAnimal(final Animal animal, final Statement statement, final boolean isRight) {
+    public IntSummaryStatistics getStatistics() {
+        return getAnimals().values().stream().collect(summarizingInt(List::size));
+    }
+
+    public void addAnimal(final String animal, final String statement, final boolean isRight) {
         LOGGER.log(Level.FINER, "...entering method addAnimal(...)");
         final var newAnimal = new TreeNode(animal);
         final var oldAnimal = new TreeNode(current.getData());
@@ -59,7 +65,7 @@ public class KnowledgeTree {
         LOGGER.log(Level.FINER, "...added {0}, '{1}' - {2}", new Object[]{animal, statement, isRight});
     }
 
-    public Map<Animal, List<String>> getAnimals() {
+    public Map<String, List<String>> getAnimals() {
         animals.clear();
         collectAnimals(root, new LinkedList<>());
         return animals;
@@ -67,14 +73,14 @@ public class KnowledgeTree {
 
     private void collectAnimals(final TreeNode node, final Deque<String> facts) {
         if (node.isLeaf()) {
-            animals.put(Animal.from(node.getData()), List.copyOf(facts));
+            animals.put(node.getData(), List.copyOf(facts));
             return;
         }
-        final var statement = Statement.from(node.getData());
-        facts.add(statement.getPositiveFact());
+        final var statement = node.getData();
+        facts.add(LanguageRules.POSITIVE_FACT.apply(statement));
         collectAnimals(node.getYes(), facts);
         facts.removeLast();
-        facts.add(statement.getNegativeFact());
+        facts.add(LanguageRules.NEGATIVE_FACT.apply(statement));
         collectAnimals(node.getNo(), facts);
         facts.removeLast();
     }

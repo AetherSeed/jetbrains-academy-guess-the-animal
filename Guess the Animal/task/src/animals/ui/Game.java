@@ -1,52 +1,73 @@
 package animals.ui;
 
-import animals.domain.Animal;
 import animals.domain.KnowledgeTree;
+import animals.domain.LanguageRules;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static animals.ui.Services.askYesNo;
 
 public final class Game implements Runnable {
+    private static final Logger LOG = Logger.getLogger(Game.class.getName());
+    private static final UI ui = new UI("game");
+
     private final KnowledgeTree db;
-    private final UI ui;
 
-    public Game(KnowledgeTree db, UI ui) {
+    public Game(KnowledgeTree db) {
         this.db = db;
-        this.ui = ui;
-
     }
 
     public void run() {
         do {
-            ui.sayThinkAnimal();
+            ui.println("think");
+            ui.println("enter");
+            ui.pause();
 
             while (db.isStatement()) {
-                System.out.println(db.getQuestion());
-                db.next(ui.askYesNo());
+                ui.println(db.getQuestion());
+                db.next(askYesNo());
             }
 
-            System.out.println(db.getQuestion());
-            final boolean isGuessedWrong = !ui.askYesNo();
+            ui.println(db.getQuestion());
 
-            if (isGuessedWrong) {
-                System.out.println("I give up. What animal do you have in mind?");
-
-                final var animal = Animal.from(ui.readLine());
-                final var guessedAnimal = Animal.from(db.getData());
-
-                System.out.printf("Specify a fact that distinguishes %s from %s:%n", animal, db.getData());
-                final var statement = ui.getStatement();
-                System.out.println("Is the statement correct for the " + animal.getName() + "?");
-                final var isCorrect = ui.askYesNo();
-                db.addAnimal(animal, statement, isCorrect);
-
-                System.out.println("I learned the following facts about animals:");
-                System.out.println(" - " + statement.getFact(guessedAnimal, !isCorrect));
-                System.out.println(" - " + statement.getFact(animal, isCorrect));
-                ui.sayLearnedMuch();
+            if (!askYesNo()) {
+                giveUp();
             }
+
             db.reset();
-            ui.askNewGame();
-        } while (ui.askYesNo());
+            ui.print("thanks");
+            ui.println("again");
 
-        ui.sayGoodbye();
+        } while (askYesNo());
     }
 
+    private void giveUp() {
+        ui.println("give.up");
+        final var animal = LanguageRules.ANIMAL.apply(ui.readLine());
+        final var guessedAnimal = db.getData();
+        ui.println("specify.fact", animal, guessedAnimal);
+        final var statement = getStatement();
+
+        ui.println("is.correct", LanguageRules.ANIMAL_NAME.apply(animal));
+        final var isCorrect = askYesNo();
+        db.addAnimal(animal, statement, isCorrect);
+        ui.println("learned");
+        ui.println("print.fact", LanguageRules.FACT_GENERATOR.apply(!isCorrect).apply(statement, guessedAnimal));
+        ui.println("print.fact", LanguageRules.FACT_GENERATOR.apply(isCorrect).apply(statement, animal));
+        ui.print("nice");
+        ui.println("know.more");
+    }
+
+    public String getStatement() {
+        while (true) {
+            ui.println("statement.format");
+            final var input = ui.readLine();
+            if (LanguageRules.IS_CORRECT_STATEMENT.test(input)) {
+                return LanguageRules.STATEMENT.apply(input);
+            }
+            LOG.log(Level.INFO, "Statement is not correct: {0}", input);
+            ui.println("statement.example");
+        }
+    }
 }
