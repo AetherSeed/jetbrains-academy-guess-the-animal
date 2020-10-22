@@ -18,6 +18,10 @@ public class Services {
         }
     }
 
+    public static String askAnimal() {
+        return LanguageRules.ANIMAL.apply(ui.readLine());
+    }
+
     public static String askFavoriteAnimal() {
         ui.println("ask.favorite.animal");
         return LanguageRules.ANIMAL.apply(ui.readLine());

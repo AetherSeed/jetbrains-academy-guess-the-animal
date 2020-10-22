@@ -1,9 +1,6 @@
 package animals.ui;
 
-import animals.domain.Animal;
-import animals.domain.KnowledgeTree;
-import animals.domain.Statement;
-import animals.domain.TreeNode;
+import animals.domain.*;
 
 import static java.lang.System.out;
 
@@ -11,17 +8,16 @@ public final class TreeServices {
     private static final UI ui = new UI("tree-services");
     private final KnowledgeTree knowledgeTree;
 
-    public TreeServices(KnowledgeTree knowledgeTree) {
+    TreeServices(KnowledgeTree knowledgeTree) {
         this.knowledgeTree = knowledgeTree;
     }
 
     void listAnimals() {
-        out.println("Here are the animals I know:");
+        ui.println("list.animals");
         knowledgeTree.getAnimals().keySet().stream()
-                .map(Animal::getName)
+                .map(LanguageRules.ANIMAL_NAME::apply)
                 .sorted()
-                .map(name -> " - " + name)
-                .forEach(out::println);
+                .forEach(name -> ui.println("list.print", name));
     }
 
     void statistics() {
@@ -38,15 +34,15 @@ public final class TreeServices {
     }
 
     void searchAnimal() {
-        out.println("Enter an animal: ");
-        final var animal = Animal.from(ui.readLine());
+        ui.println("search.animal");
+        final var animal = Services.askAnimal();
         final var animals = knowledgeTree.getAnimals();
         if (animals.containsKey(animal)) {
-            out.println("Facts about the " + animal.getName() + ":");
+            ui.println("search.facts", LanguageRules.ANIMAL_NAME.apply(animal));
             final var facts = animals.get(animal);
-            facts.forEach(fact -> out.println(" - " + fact));
+            facts.forEach(fact -> ui.println("search.print", fact));
         } else {
-            out.println("The animal is not in my knowledge tree.");
+            ui.println("search.not_found");
         }
     }
 

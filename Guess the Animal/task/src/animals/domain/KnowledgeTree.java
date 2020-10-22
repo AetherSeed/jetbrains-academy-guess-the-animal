@@ -8,8 +8,8 @@ import static java.util.stream.Collectors.summarizingInt;
 
 public class KnowledgeTree {
     private static final Logger LOGGER = Logger.getLogger(KnowledgeTree.class.getName());
-    private final Map<Animal, List<String>> animals = new HashMap<>();
-    protected TreeNode current;
+    private final Map<String, List<String>> animals = new HashMap<>();
+    private TreeNode current;
     private TreeNode root;
 
     public void reset() {
@@ -65,7 +65,7 @@ public class KnowledgeTree {
         LOGGER.log(Level.FINER, "...added {0}, '{1}' - {2}", new Object[]{animal, statement, isRight});
     }
 
-    public Map<Animal, List<String>> getAnimals() {
+    public Map<String, List<String>> getAnimals() {
         animals.clear();
         collectAnimals(root, new LinkedList<>());
         return animals;
@@ -73,7 +73,7 @@ public class KnowledgeTree {
 
     private void collectAnimals(final TreeNode node, final Deque<String> facts) {
         if (node.isLeaf()) {
-            animals.put(Animal.from(node.getData()), List.copyOf(facts));
+            animals.put(node.getData(), List.copyOf(facts));
             return;
         }
         final var statement = Statement.from(node.getData());
