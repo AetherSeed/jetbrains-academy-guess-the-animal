@@ -29,6 +29,7 @@ public class Greetings_eo extends ListResourceBundle {
     protected Object[][] getContents() {
         return new Object[][]{
                 {"hi", greetings},
+                {"welcome", "Bonvenon al la sperta sistemo de la besto!"},
                 {"bye", new String[]{
                         "Ĝis!",
                         "Ĝis revido!",

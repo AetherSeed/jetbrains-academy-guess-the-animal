@@ -7,7 +7,8 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 
 public interface KnowledgeBase {
-    String FILENAME = "animals";
+    String LANGUAGE = System.getProperty("user.language");
+    String FILENAME = "en".equals(LANGUAGE) ? "animals" : "animals_" + LANGUAGE;;
 
     KnowledgeTree load();
 
