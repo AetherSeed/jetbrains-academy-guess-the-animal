@@ -38,7 +38,7 @@ public enum LanguageRules {
 
     public static final Predicate<String> IS_NEGATIVE_ANSWER = (Predicate<String>) ResourceBundle
             .getBundle("animals.localization.LanguageRules")
-            .getObject("isPositiveAnswer");
+            .getObject("isNegativeAnswer");
 
     private final UnaryOperator<String> rule;
 

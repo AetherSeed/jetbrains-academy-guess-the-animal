@@ -17,7 +17,8 @@ public class KnowledgeTree {
     }
 
     public String getQuestion() {
-        final var question = isAnimal() ? LanguageRules.ANIMAL_QUESTION : LanguageRules.STATEMENT_QUESTION;
+        final var question =
+                current.isLeaf() ? LanguageRules.ANIMAL_QUESTION : LanguageRules.STATEMENT_QUESTION;
         return question.apply(current.getData());
     }
 

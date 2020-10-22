@@ -48,7 +48,7 @@ public final class TreeServices {
 
     void deleteAnimal() {
         if (knowledgeTree.getRoot().isLeaf()) {
-            out.println("delete.root");
+            ui.println("delete.root");
             return;
         }
         ui.println("delete.animal");
